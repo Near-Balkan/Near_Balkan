@@ -1,6 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
 
-const Layout = ({ user, userObject }) => {
+const Layout = () => {
     return (
         <main id="innerGrid" className="container">
             {/* <div id="gridRow breadcrumbs" className="flex flex-col justify-start items-center w-full lg:max-w-5xl">

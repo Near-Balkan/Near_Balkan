@@ -1,14 +1,16 @@
 import Select from 'react-select'
 import { useForm } from 'react-hook-form'
-import { useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { useUploadImage } from '../hooks/useUploadImage'
 import { CustomSelect } from './CustomSelect'
+import { UserContext } from '../App'
 
 
-export function Filmography({ sendData, user }) {
+export function Filmography({ sendData }) {
 
     const { uploadImage } = useUploadImage()
-
+    const {user} = useContext(UserContext);
+    
     const titleOptions = [
         { value: 'screenwriter', label: 'Screenwriter' },
         { value: 'director', label: 'Director' },

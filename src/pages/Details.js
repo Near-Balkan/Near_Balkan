@@ -1,6 +1,7 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import {UserContext} from '../App';
 
 // Router
 import { Link } from 'react-router-dom';
@@ -24,12 +25,13 @@ import {
   Item,
 } from '@radix-ui/react-navigation-menu';
 
-const Details = ({ user, targetDate, haveWon }) => {
+const Details = ({targetDate, haveWon}) => {
   const { id } = useParams();
   const videoRef = React.useRef(null);  //megtekintesek novelesehez kell
   const [stars, setStars] = useState([]);
   const [movie, setMovie] = useState({});
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(); 
+  const {user} = useContext(UserContext)
 
   useEffect(() => {
     const loadDocument = async () => {
@@ -37,7 +39,7 @@ const Details = ({ user, targetDate, haveWon }) => {
       const docSnap = await getDoc(docRef);
       const userSnap = await getDoc(doc(database, 'users', docSnap.data().user));
 
-      setMovie({ ...docSnap.data(), userId: userSnap.id, user: userSnap.data() });
+      setMovie({id, ...docSnap.data(), userId: userSnap.id, user: userSnap.data() });
     };
     loadDocument();
   }, [id]);
@@ -99,7 +101,7 @@ const Details = ({ user, targetDate, haveWon }) => {
       <section className="w-full max-w-screen-xl flex flex-col sm:grid grid-cols-7 grid-rows-1 gap-4 relative">
         {user && (
           <div className='absolute top-2 left-2 p-2 bg-nbredmain cursor-pointer rounded-full shadow-md hover:bg-red-400 z-20'>
-            <AddFavorite movieId={id} user={user} />
+            <AddFavorite movie={movie} />
           </div>
         )}
         <div class={`${user && "hidden sm:block"} ${!user && "block opacity-30 sm:opacity-100"} bg-white rounded-md aspect-w-2 aspect-h-3 transition-all overflow-clip col-span-2 row-span-1 row-start-1`}>
@@ -150,7 +152,7 @@ const Details = ({ user, targetDate, haveWon }) => {
         )}
       </section >
       <div class="flex flex-col justify-evenly md:justify-start gap-4 md:gap-0 md:grid grid-cols-1 md:grid-cols-9 grid-rows-3 md:grid-rows-1 md:max-h-[92px]">
-        <FundingButtons targetDate={targetDate} movie={movie} user={user} haveWon={haveWon} />
+        <FundingButtons targetDate={targetDate} movie={movie} haveWon={haveWon} />
       </div>
       {user && (
         <>
@@ -286,13 +288,13 @@ const Details = ({ user, targetDate, haveWon }) => {
               </Link>
             </section>
           </section>
-          <Comments id={id} movie={movie} user={user} />
+          <Comments id={id} movie={movie} />
         </>
       )
       }
       {
         !user && (
-          <Comments className="min-w-screen-lg" id={id} movie={movie} user={user} />
+          <Comments className="min-w-screen-lg" id={id} movie={movie} />
         )
       }
 

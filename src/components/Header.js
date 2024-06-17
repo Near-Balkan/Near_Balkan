@@ -1,6 +1,6 @@
 // Routes
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState , useContext} from 'react';
 
 // Components
 import { useTranslation } from 'react-i18next';
@@ -18,8 +18,11 @@ import {
 // Icons
 import { useAuth } from '../hooks/useAuth';
 
-const Header = ({ user, userObject, search, setSearch, betaVersion }) => {
+import {UserContext} from '../App'
+
+const Header = ({ search, setSearch, betaVersion }) => {
   const { signOutUser } = useAuth();
+  const {user, userObject} = useContext(UserContext)
 
   const { t, i18n } = useTranslation();
   const changeLanguage = (lng) => {

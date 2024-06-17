@@ -1,22 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useUpdateProfile } from '../hooks/useUpdateProfile';
 import { MdOutlineClose, MdCheck } from 'react-icons/md';
 import { FaUserAlt } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import  { useTranslation } from 'react-i18next';
+import {UserContext} from '../App'
+
 
 const languages = [
   'en',
   'hu',
 ];
 
-const Profile = ({ user }) => {
+const Profile = () => {
   const { t, i18n } = useTranslation(); 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [image, setImage] = useState('');
+  const {user, userObject} = useContext(UserContext)
 
   console.log(image);
 

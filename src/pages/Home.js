@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useContext } from 'react';
+
+import {UserContext} from '../App';
 
 import {
   collection,
@@ -42,11 +44,12 @@ const fetchUsersForFilms = async (films) => {
 
 
 
-const Home = ({ user, search }) => {
+const Home = ({ search }) => {
   const { documents: competitions } = useFetchData('competitions'); //documents nelkul is szar
 
   const { t, i18n } = useTranslation();
   const [adUrl, setAdUrl] = useState('')
+  const {user} = useContext(UserContext)
 
   const [randomMovie, setRandomMovie] = useState(0);
 

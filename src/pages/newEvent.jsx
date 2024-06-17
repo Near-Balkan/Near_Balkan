@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from 'yup';
 import { CustomSelect } from '../components/CustomSelect';
+import {UserContext} from '../App';
 
 const months = [
     { label: 'January', value: 'January' },
@@ -23,7 +24,7 @@ const months = [
 
 
 
-const NewEvent = ({ user }) => {
+const NewEvent = () => {
     const { t, i18n } = useTranslation();
     const [images, setImages] = useState([]);             //kep
     const [month, setMonth] = useState('');             //cim
@@ -32,6 +33,7 @@ const NewEvent = ({ user }) => {
     const [workShops, setWorkShops] = useState([]);
     /*2024.04.12*/
 
+    const {user} = useContext(UserContext);
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
 

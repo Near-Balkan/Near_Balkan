@@ -4,21 +4,28 @@ import {
     onSnapshot,
     orderBy,
     query,
-    doc, getDoc
-} from 'firebase/firestore';
+    doc, getDoc,
+    where,
+    documentId
+} from 'firebase/firestore'
 import { database } from '../firebase/config'
 
+export function useFetchFavourites(userObject) {
 
-export function useFetchMovies({ fieldToOrderBy, isDescending = false }) {
-    const [movies, setMovies] = useState([]);
+    const [favorites, setFavorites] = useState(null)
 
 
     useEffect(() => {
-        async function fetchMovies() {
-            const collectionRef = collection(database, 'films')
-            const movieQuery = query(collectionRef, (orderBy(fieldToOrderBy, isDescending ? 'desc' : 'asc')))
-            onSnapshot(movieQuery, async (querySnapshot) => {
-                setMovies(
+        const fetchFavourites = async () => {
+            if (!userObject) return
+            const favouriteIds = userObject.favourites
+            if (favouriteIds.length === 0) {
+                setFavorites(null)
+                return
+            }
+            const q = query(collection(database, 'films'), 'films', where(documentId(), 'in', favouriteIds))
+            onSnapshot(q, async (querySnapshot) => {
+                setFavorites(
                     await Promise.all(querySnapshot.docs.map(async (document) => {
                         let movie = document.data()
                         console.log(document.data())
@@ -36,8 +43,8 @@ export function useFetchMovies({ fieldToOrderBy, isDescending = false }) {
                 )
             })
         }
-        fetchMovies()
-    }, [fieldToOrderBy, isDescending])
 
-    return { movies }
+        fetchFavourites();
+    }, [userObject])
+    return { favorites }
 }

@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useComment } from '../hooks/useComment';
 import { useFetchComments } from '../hooks/usefetchComments';
+import { UserContext } from '../App'
 
 import { FaLock } from 'react-icons/fa';
 import { TiDelete } from 'react-icons/ti';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const Comments = ({ id, movie, user }) => {
+const Comments = ({ id, movie }) => {
   const { t, i18n } = useTranslation();
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
   };
-
+  const {user} = useContext(UserContext);
   const [newComment, setNewComment] = useState('');
 
   const { comments } = useFetchComments(id);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Loading from '../components/Loading';
 import { useAddReview } from '../hooks/useAddReview';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from 'yup';
 import { CustomSelect } from '../components/CustomSelect';
+import {UserContext} from '../App';
 
 const genreOptions = [
   { label: 'Action', value: 'action' },
@@ -47,7 +48,7 @@ const genreOptionsHU = [
   { label: 'Western', value: 'western' }
 ];
 
-const NewReview = ({ user }) => {
+const NewReview = () => {
   const { t, i18n } = useTranslation();
   const [image, setImage] = useState('');             //kep
   const [title, setTitle] = useState('');             //cim
@@ -64,6 +65,7 @@ const NewReview = ({ user }) => {
 
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const {user} = useContext(UserContext);
 
 
   const schema = yup.object().shape({

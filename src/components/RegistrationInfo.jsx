@@ -4,15 +4,17 @@ import { useForm } from 'react-hook-form';
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
 import { Filmography } from "./Fimography";
 import { useTranslation } from "react-i18next";
+import { UserContext } from '../App'
 
 import * as yup from 'yup';
 import { CustomSelect } from "./CustomSelect";
 
-export const RegistrationInfo = ({ user }) => {
+export const RegistrationInfo = () => {
     const { t } = useTranslation();
+    const { user } = useContext(UserContext);
 
     const titleOptions = [
         { value: 'screenwriter', label: 'Screenwriter' },
@@ -88,8 +90,8 @@ export const RegistrationInfo = ({ user }) => {
             user = { ...user, filmography: filmography }
         }
 
-        if(profilePicture){
-            user = {...user, profilePicture: profilePicture}
+        if (profilePicture) {
+            user = { ...user, profilePicture: profilePicture }
         }
         return user;
     }
@@ -145,113 +147,6 @@ export const RegistrationInfo = ({ user }) => {
             }, 3000);
         }
     }, [error]);
-
-
-
-    /* return (
-        <form
-                className='flex flex-col justify-center items-center gap-2 mt-8 w-full'
-                onSubmit={handleSubmit(handleRegister)}
-            >
-                <p className='mt-2 text-gray-500 text-sm italic'>
-                    {t("register_info.register_info")}
-                </p>
-                {errors.firstName && (<p>{errors.firstName?.message}</p>)}
-                <input
-                    type='text'
-                    {...register("firstName")}
-                    placeholder={t("register_info.first_name")}
-                    autoComplete='false'
-                    className='shadow-sm p-4 rounded-md w-full italic outline-none'
-                />
-                {errors.lastName && (<p>{errors.lastName?.message}</p>)}
-                <input
-                    type='text'
-                    {...register("lastName")}
-                    placeholder={t("register_info.last_name")}
-                    autoComplete='false'
-                    className='shadow-sm p-4 rounded-md w-full italic outline-none'
-                />
-                {errors.phoneNumber && (<p>{errors.phoneNumber?.message}</p>)}
-                <input
-                    type='tel'
-                    {...register("phoneNumber")}
-                    placeholder={t("register_info.phone_number")}
-                    autoComplete='false'
-                    className='shadow-sm p-4 rounded-md w-full italic outline-none'
-                />
-                {errors.birthDate && (<p>{errors.birthDate?.message}</p>)}
-                <input
-                    type='date'
-                    {...register("birthDate")}
-                    placeholder={t("register_info.date_of_birth")}
-                    autoComplete='false'
-                    className='shadow-sm p-4 rounded-md w-full italic outline-none'
-                />
-                {errors.userName && (<p>{errors.userName?.message}</p>)}
-                <input
-                    type='text'
-                    {...register("userName")}
-                    placeholder={t("register_info.username")}
-                    autoComplete='true'
-                    className='shadow-sm p-4 rounded-md w-full italic outline-none'
-                />
-                {errors.userType && (<p>{errors.userType?.message}</p>)}
-                <select name="typeSelect"
-                    {...register("userType")}
-                    onChange={(e) => setUserType(e.target.value)}
-                    className='shadow-sm p-4 rounded-md w-full italic outline-none'>
-                    <option value="creator"> {t("register_info.content_creator")}</option>
-                    <option value="viewer" selected>{t("register_info.viewer")}</option>
-                </select>
-
-                {userType === 'creator' && (
-                    <>
-                        {rolesError && (<p>{rolesError}</p>)}
-                        <Select
-                            className='shadow-sm p-4 rounded-md w-full italic outline-none'
-                            options={titleOptions}
-                            isMulti
-                            placeholder="Your preferred roles on movie"
-                            onChange={e => {
-                                setRoles(Array.isArray(e) ? e.map(x => x.value) : [])
-                            }}
-                            closeMenuOnSelect={false}>
-                        </Select>
-                        {filmographyError && (<p>{filmographyError}</p>)}
-                        <Filmography user={user} sendData={addFilmograpy} />
-
-                        {filmography.length > 0 && (
-                            <>
-                                <p>{t("register_info.filmography")}</p>
-                                {filmography.map(film =>
-                                    <div>{film.title} {film.year} {film.role}</div>
-                                )}
-                            </>
-                        )}
-
-                    </>
-                )}
-
-
-
-                {!loading && (
-                    <input
-                        type='submit'
-                        value={t("register_info.create_account")}
-                        className='bg-nbgreenmain hover:bg-nbgreenlight shadow-sm p-4 rounded-md w-full font-bold text-white hover:tracking-wider transition-all duration-300 cursor-pointer'
-                    />
-                )}
-
-                {loading && (
-                    <div className='flex justify-center items-center w-full'>
-                        <Loading size={'30px'} />
-                    </div>
-                )}
-
-                {error && <p className='error'>{error}</p>}
-            </form>
-    ) */
 
     return (
         <div class="flex flex-wrap justify-center items-center gridRow">
@@ -380,12 +275,12 @@ export const RegistrationInfo = ({ user }) => {
                                                     class="bg-nbgreenmain hover:bg-nbgreendark focus:bg-nbgreendark shadow-sm px-2.5 py-1.5 rounded-md font-semibold text-nbgreylight text-sm focus:ring-1 focus:ring-nbgreenmain ring-offset">Upload file</button>
                                                 <input
                                                     type="file"
-                                                    id = "profilePicture"
-                                                    name = "profilePicture"
+                                                    id="profilePicture"
+                                                    name="profilePicture"
                                                     accept='image/*'
                                                     {...register("profilePicture")}
                                                     onChange={e => setProfilePicture(e.target.files[0])}
-                                                    ref={hiddenInput} 
+                                                    ref={hiddenInput}
                                                     className='sr-only' />
                                             </div>
                                             <p>{profilePicture.name}</p>
@@ -438,7 +333,7 @@ export const RegistrationInfo = ({ user }) => {
 
                             <CustomSelect isMulti={true} options={titleOptions} onSelect={setRoles}></CustomSelect>
                             {rolesError && (<p className="pt-2 font-h3-subtitle text-nbredmain text-xs">{rolesError}</p>)}
-                            <Filmography user={user} sendData={addFilmograpy}></Filmography>
+                            <Filmography sendData={addFilmograpy}></Filmography>
                             {filmographyError && (<p className="pt-2 font-h3-subtitle text-nbredmain text-xs">{filmographyError}</p>)}
 
                         </>}
